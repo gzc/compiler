@@ -43,7 +43,7 @@ void yyerror(char *s);
 %token <index> VARIABLE
 %token INT FLOAT
 %token PRINT
-%token FOR FOREACH WHILE BREAK
+%token FOR FOREACH WHILE BREAK CONTINUE
 %token IN
 %token FUNCTION
 %nonassoc IF
@@ -77,6 +77,8 @@ function stmt{ NodeExecute($2);NodeFree($2); }
 stmt:
 
 BREAK ';' { $$ = opr(BREAK,0); }
+
+| CONTINUE ';' { $$ = opr(CONTINUE,0); }
 
 | ';'{ $$=opr(';',2,NULL,NULL); }
 

@@ -137,6 +137,21 @@ any .
     return BREAK;
 }
 
+"continue" {
+
+    yylval.index = CONTINUE - USER_DEF_NUM;
+
+    G_Def[yylval.index].name= "continue";
+
+    char buf[100] = "Token	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
+
+    return CONTINUE;
+}
+
 "while" {
 
     yylval.index = WHILE-USER_DEF_NUM;
