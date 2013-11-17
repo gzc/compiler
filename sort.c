@@ -1,5 +1,5 @@
-int main()
-{
+
+
     int a[9];
     int s[9];
     int i; 
@@ -35,7 +35,7 @@ int main()
 	a[low] = a[j];
 	a[j] = x;
 	q = j;
-	if(q-low > high-q)
+	if((q-low) > (high-q))
 	{
 	    s[p++] = low;
 	    s[p++] = q-1;
@@ -60,4 +60,4 @@ int main()
     
     }
 
-}
+

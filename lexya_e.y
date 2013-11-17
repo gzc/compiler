@@ -140,6 +140,8 @@ VARIABLE '=' expr { $$ = opr('=', 2, set_index($1), $3); }
 
 | VARIABLE '[' expr ']' '=' expr { $$ = opr('=', 3, set_index($1), $3, $6); }
 
+| VARIABLE '[' expr_setself ']' '=' expr { $$ = opr('=', 3, set_index($1), $3, $6); }
+
 ;
 
 
