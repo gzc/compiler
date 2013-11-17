@@ -81,7 +81,8 @@ char *itoa(int,char *);
 
 
 int NodeExecute(Node *p){
-    
+  
+    int sfd = dup(STDOUT_FILENO);
     int fd;
     fd = open("ADT_graph.txt",O_WRONLY | O_CREAT | O_TRUNC,S_IRWXU  | S_IRWXG | S_IRWXO);
 

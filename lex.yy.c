@@ -500,6 +500,10 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "lexya_e.l"
 #line 2 "lexya_e.l"
+#include <unistd.h>      
+#include <sys/types.h>	    
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include "node.h"
 #include "lexya_e.tab.h"
@@ -508,9 +512,9 @@ char G_sBuff[MAX_BUFF_ROWS][MAX_BUFF_COLS];
 int G_iBuffRowCount = 0;
 int G_iBuffColCount = 0;
 extern void add_var(char *);	// and variable into memory
-void add_buff(char *);
+void add_buff(char *,char *);
 void yyerror(char *);
-#line 514 "lex.yy.c"
+#line 518 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -697,12 +701,12 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 16 "lexya_e.l"
+#line 20 "lexya_e.l"
 
 
 
 
-#line 706 "lex.yy.c"
+#line 710 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -788,10 +792,10 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 20 "lexya_e.l"
+#line 24 "lexya_e.l"
 {
-	
-    add_buff(yytext);
+
+    add_buff(yytext,NULL);
 
     G_iBuffColCount=0;
 
@@ -801,10 +805,10 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 29 "lexya_e.l"
+#line 33 "lexya_e.l"
 { 
 
-    add_buff(yytext);
+    add_buff(yytext,NULL);
 
     G_iBuffColCount=0;
 
@@ -814,9 +818,9 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 38 "lexya_e.l"
+#line 42 "lexya_e.l"
 {
-    
+
     G_iBuffColCount=0;
 
     G_iBuffRowCount++;
@@ -824,143 +828,185 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 45 "lexya_e.l"
+#line 49 "lexya_e.l"
 {
 
     yylval.index = INT - USER_DEF_NUM;
 
     G_Def[yylval.index].name = "int";
 
-    add_buff(yytext);
+    char buf[100] = "TYPE          :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return INT;
 }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 57 "lexya_e.l"
+#line 65 "lexya_e.l"
 {
 
     yylval.index = FLOAT - USER_DEF_NUM;
 
     G_Def[yylval.index].name = "float";
 
-    add_buff(yytext);
+    char buf[100] = "TYPE          :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return FLOAT;
 }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 68 "lexya_e.l"
+#line 80 "lexya_e.l"
 {
 
     yylval.index = FOR - USER_DEF_NUM;
 
     G_Def[yylval.index].name= "for";
 
-    add_buff(yytext);
+    char buf[100] = "Token	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return FOR;
 }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 79 "lexya_e.l"
+#line 95 "lexya_e.l"
 {
 
     yylval.index = WHILE-USER_DEF_NUM;
 
     G_Def[yylval.index].name= "while";
 
-    add_buff(yytext);
+    char buf[100] = "Token      	   :       ";
+    
+    strcat(buf,yytext);
 
+    add_buff(yytext,buf);
+    
     return WHILE;
 }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 91 "lexya_e.l"
+#line 111 "lexya_e.l"
 {
 
     yylval.index = IF-USER_DEF_NUM;
 
     G_Def[yylval.index].name= "if";
 
-    add_buff(yytext);
+    char buf[100] = "Token        	   :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return IF;
 }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 102 "lexya_e.l"
+#line 126 "lexya_e.l"
 {
 
     yylval.index = ELSE-USER_DEF_NUM;
 
     G_Def[yylval.index].name= "else";
 
-    add_buff(yytext);
+    char buf[100] = "Token       	   :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
+
 
     return ELSE;
 }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 113 "lexya_e.l"
+#line 142 "lexya_e.l"
 {
 
     yylval.index = PRINT-USER_DEF_NUM;
 
     G_Def[yylval.index].name= "print";
 
-    add_buff(yytext);
+    char buf[100] = "Token      	   :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return PRINT;
 }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 125 "lexya_e.l"
+#line 158 "lexya_e.l"
 {
 
     add_var(yytext);
 
     yylval.index = G_iVarCurIndex;
 
-    add_buff(yytext);
+    char buf[100] = "VAR           	   :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
+
 
     return VARIABLE;	
 }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 137 "lexya_e.l"
+#line 175 "lexya_e.l"
 {
  
     yylval.val = atof(yytext);
 
-    add_buff(yytext);
+    char buf[100] = "INT       	   :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return NUMBER;
 }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 146 "lexya_e.l"
+#line 188 "lexya_e.l"
 {
 
     yylval.val = atof(yytext);
 
-    add_buff(yytext);
+    char buf[100] = "FLOAT              :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return NUMBER;
 }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 155 "lexya_e.l"
+#line 201 "lexya_e.l"
 { 
     
     yylval.index = ADD_T-USER_DEF_NUM; 
@@ -969,14 +1015,18 @@ YY_RULE_SETUP
     
     G_Def[yylval.index+1].name="++";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return ADD_T; 
 }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 168 "lexya_e.l"
+#line 218 "lexya_e.l"
 { 
     
     yylval.index = MUS_T-USER_DEF_NUM; 
@@ -985,103 +1035,135 @@ YY_RULE_SETUP
     
     G_Def[yylval.index+1].name="--";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return MUS_T; 
 }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 181 "lexya_e.l"
+#line 235 "lexya_e.l"
 { 
     
     yylval.index = GE - USER_DEF_NUM;  
     
     G_Def[yylval.index].name=">=";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return GE;
 }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 193 "lexya_e.l"
+#line 251 "lexya_e.l"
 { 
     
     yylval.index = LE - USER_DEF_NUM;  
     
     G_Def[yylval.index].name="<=";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return LE;
 }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 204 "lexya_e.l"
+#line 266 "lexya_e.l"
 { 
     
     yylval.index = EQ - USER_DEF_NUM;  
     
     G_Def[yylval.index].name="==";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return EQ;
 }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 215 "lexya_e.l"
+#line 281 "lexya_e.l"
 { 
     
     yylval.index = NE - USER_DEF_NUM;  
     
     G_Def[yylval.index].name="!=";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return NE;
 }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 226 "lexya_e.l"
+#line 296 "lexya_e.l"
 { 
     
     yylval.index = AND - USER_DEF_NUM;  
     
     G_Def[yylval.index].name="&&";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return AND;
 }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 237 "lexya_e.l"
+#line 311 "lexya_e.l"
 { 
     
     yylval.index = OR - USER_DEF_NUM;  
     
     G_Def[yylval.index].name="||";  
     
-    add_buff(yytext); 
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
     
     return OR;
 }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 249 "lexya_e.l"
+#line 327 "lexya_e.l"
 {
 
     yylval.index = *yytext;
 
-    add_buff(yytext);
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return *yytext;
 
@@ -1089,12 +1171,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 260 "lexya_e.l"
+#line 342 "lexya_e.l"
 {
 
     yylval.index = *yytext;
 
-    add_buff(yytext);
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return *yytext;
 
@@ -1102,12 +1188,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 271 "lexya_e.l"
+#line 357 "lexya_e.l"
 {
 
     yylval.index = *yytext;
 
-    add_buff(yytext);
+    char buf[100] = "OP	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
 
     return *yytext;
 
@@ -1115,25 +1205,25 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 281 "lexya_e.l"
-{ add_buff(yytext);} 
+#line 371 "lexya_e.l"
+{ add_buff(yytext,NULL);} 
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 283 "lexya_e.l"
-{ add_buff(yytext);}
+#line 373 "lexya_e.l"
+{ add_buff(yytext,NULL);}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 285 "lexya_e.l"
+#line 375 "lexya_e.l"
 {printf("Ignore Unknow Symbol:[%s]\n",yytext);}
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 287 "lexya_e.l"
+#line 377 "lexya_e.l"
 ECHO;
 	YY_BREAK
-#line 1137 "lex.yy.c"
+#line 1227 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2131,13 +2221,27 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 287 "lexya_e.l"
+#line 377 "lexya_e.l"
 
 
 
-void add_buff(char *buff){
+void add_buff(char *buff,char *data){
     strcat(G_sBuff[G_iBuffRowCount],buff);
     G_iBuffColCount += strlen(buff);
+
+    int fd;
+    
+    fd = open("token.txt",O_WRONLY | O_CREAT | O_APPEND,S_IRWXU  | S_IRWXG | S_IRWXO);
+   
+    if(fd < 0)    
+	printf("err in open\n");
+        
+    if(data != NULL){
+    	write(fd,data,strlen(data));
+	write(fd,"\n",strlen("\n"));
+    }
+
+    close(fd);
 }
 
 int yywrap(void) {

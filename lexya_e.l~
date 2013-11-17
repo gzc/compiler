@@ -52,9 +52,10 @@ any .
 
     G_Def[yylval.index].name = "int";
 
-    char buf[100] = "TYPE          :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"TYPE		:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -68,9 +69,10 @@ any .
 
     G_Def[yylval.index].name = "float";
 
-    char buf[100] = "TYPE          :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"TYPE		:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -83,9 +85,10 @@ any .
 
     G_Def[yylval.index].name= "for";
 
-    char buf[100] = "Token	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"Token	:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -98,7 +101,7 @@ any .
 
     G_Def[yylval.index].name= "while";
 
-    char buf[100] = "Token      	   :       ";
+    char buf[100] = "Token         :       ";
     
     strcat(buf,yytext);
 
@@ -114,7 +117,7 @@ any .
 
     G_Def[yylval.index].name= "if";
 
-    char buf[100] = "Token        	   :       ";
+    char buf[100] = "Token         :       ";
     
     strcat(buf,yytext);
 
@@ -129,12 +132,12 @@ any .
 
     G_Def[yylval.index].name= "else";
 
-    char buf[100] = "Token       	   :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"Token	:	%s",buf);
 
     add_buff(yytext,buf);
-
 
     return ELSE;
 }
@@ -145,9 +148,10 @@ any .
 
     G_Def[yylval.index].name= "print";
 
-    char buf[100] = "Token      	   :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"Token	:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -161,12 +165,12 @@ any .
 
     yylval.index = G_iVarCurIndex;
 
-    char buf[100] = "VAR           	   :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"VAR		:	%s",buf);
 
     add_buff(yytext,buf);
-
 
     return VARIABLE;	
 }
@@ -176,9 +180,10 @@ any .
  
     yylval.val = atof(yytext);
 
-    char buf[100] = "INT       	   :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"INT		:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -189,9 +194,10 @@ any .
 
     yylval.val = atof(yytext);
 
-    char buf[100] = "FLOAT              :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"FLOAT	:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -206,9 +212,10 @@ any .
     
     G_Def[yylval.index+1].name="++";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -223,9 +230,10 @@ any .
     
     G_Def[yylval.index+1].name="--";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -238,9 +246,10 @@ any .
     
     G_Def[yylval.index].name=">=";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -254,9 +263,10 @@ any .
     
     G_Def[yylval.index].name="<=";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -269,9 +279,10 @@ any .
     
     G_Def[yylval.index].name="==";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -284,9 +295,10 @@ any .
     
     G_Def[yylval.index].name="!=";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -299,9 +311,10 @@ any .
     
     G_Def[yylval.index].name="&&";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -314,9 +327,10 @@ any .
     
     G_Def[yylval.index].name="||";  
     
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
     
@@ -328,9 +342,10 @@ any .
 
     yylval.index = *yytext;
 
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -343,9 +358,10 @@ any .
 
     yylval.index = *yytext;
 
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -358,9 +374,10 @@ any .
 
     yylval.index = *yytext;
 
-    char buf[100] = "OP	           :       ";
-    
-    strcat(buf,yytext);
+    char buf[100];
+
+    memset(buf,100,0);
+    sscanf(yytext,"OP		:	%s",buf);
 
     add_buff(yytext,buf);
 
@@ -386,11 +403,12 @@ void add_buff(char *buff,char *data){
    
     if(fd < 0)    
 	printf("err in open\n");
-        
-    if(data != NULL){
-    	write(fd,data,strlen(data));
-	write(fd,"\n",strlen("\n"));
-    }
+        /*  
+    if(dup2(fd,STDOUT_FILENO) < 0)	     
+	printf("err in dup2\n");*/
+
+    if(!data)
+    	printf("%s\n",data);
 
     close(fd);
 }
