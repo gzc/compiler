@@ -92,6 +92,21 @@ any .
     return FOR;
 }
 
+"break" {
+
+    yylval.index = FOR - USER_DEF_NUM;
+
+    G_Def[yylval.index].name= "break";
+
+    char buf[100] = "Token	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
+
+    return BREAK;
+}
+
 "while" {
 
     yylval.index = WHILE-USER_DEF_NUM;

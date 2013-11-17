@@ -82,7 +82,6 @@ char *itoa(int,char *);
 
 int NodeExecute(Node *p){
   
-    int sfd = dup(STDOUT_FILENO);
     int fd;
     fd = open("ADT_graph.txt",O_WRONLY | O_CREAT | O_TRUNC,S_IRWXU  | S_IRWXG | S_IRWXO);
 
@@ -143,6 +142,7 @@ void GraphNode(Node *p,int xoffset,int yoffset,int parent) {
 		 case WHILE: sNodeText = "while";  break;
 		 case IF:     sNodeText = "if";    break;
 		 case FOR:    sNodeText = "for";   break;
+		 case BREAK:  sNodeText = "break"; break;
 		 case PRINT:  sNodeText = "print"; break;
 		 case ';':    sNodeText = "[;]";   break;		 
 		 case '=':    sNodeText = "[=]";   break;

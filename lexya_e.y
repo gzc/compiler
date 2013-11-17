@@ -43,7 +43,7 @@ void yyerror(char *s);
 %token <index> VARIABLE
 %token INT FLOAT
 %token PRINT
-%token FOR WHILE
+%token FOR WHILE BREAK
 %token FUNCTION
 %nonassoc IF
 %nonassoc ELSE
@@ -75,23 +75,25 @@ function stmt{ NodeExecute($2);NodeFree($2); }
 
 stmt:
 
-';'{ $$=opr(';',2,NULL,NULL);debug_vsp(yyval,";",yyvsp,"0");}
+BREAK ';' { $$ = opr(BREAK,0); }
 
-| expr_set';'{$$=$1;debug_vsp(yyval,"es;",yyvsp,"01"); }
+| ';'{ $$=opr(';',2,NULL,NULL); }
 
-| PRINT expr';'{$$=opr(PRINT,1,$2);debug_vsp(yyval,"p(e);",yyvsp,"401");}
+| expr_set';'{ $$=$1; }
 
-| PRINT expr_set ';'    { $$ = opr(PRINT, 1, $2); debug_vsp(yyval,"p(es);",yyvsp,"401"); }
+| PRINT expr';'{ $$=opr(PRINT,1,$2); }
 
-| FOR '(' expr_set ';' expr_comp ';' expr_set ')' stmt { $$ = opr(FOR, 4, $3, $5, $7, $9); debug_vsp(yyval,"for(es;ec;es) st",yyvsp,"410101010"); }
+| PRINT expr_set ';'    { $$ = opr(PRINT, 1, $2); }
 
-| WHILE '(' expr_comp ')' stmt       { $$ = opr(WHILE, 2, $3, $5); debug_vsp(yyval,"while(ec) st",yyvsp,"41010"); }
+| FOR '(' expr_set ';' expr_comp ';' expr_set ')' stmt { $$ = opr(FOR, 4, $3, $5, $7, $9); }
 
-| IF'('expr_comp')'stmt %prec IF{$$=opr(IF,2,$3,$5);debug_vsp(yyval,"if(ec) st",yyvsp,"41010");}
+| WHILE '(' expr_comp ')' stmt       { $$ = opr(WHILE, 2, $3, $5); }
 
-| IF'('expr_comp')'stmt ELSE stmt %prec ELSE{$$=opr(IF,3,$3,$5,$7);debug_vsp(yyval,"if(ec)else st",yyvsp,"4101040"); }
+| IF'('expr_comp')'stmt %prec IF{ $$=opr(IF,2,$3,$5); }
 
-| '{'stmt_list'}'{$$=$2;debug_vsp(yyval,"{stl}",yyvsp,"101"); }
+| IF'('expr_comp')'stmt ELSE stmt %prec ELSE{ $$=opr(IF,3,$3,$5,$7); }
+
+| '{'stmt_list'}'{ $$=$2; }
 
 | var_decl';'{}
 
@@ -100,9 +102,9 @@ stmt:
 
 stmt_list:
 
-stmt{$$=$1;debug_vsp(yyval,"st",yyvsp,"0");}
+stmt{ $$=$1; }
 
-| stmt_list stmt{$$=opr(';',2,$1,$2);debug_vsp(yyval,"stl st",yyvsp,"00");}
+| stmt_list stmt{ $$=opr(';',2,$1,$2); }
 
 ;
 
@@ -125,9 +127,9 @@ INT VARIABLE{ $$ = set_index($2);}
 
 expr_set:
 
-VARIABLE '=' expr { $$ = opr('=', 2, set_index($1), $3); debug_vsp(yyval,"v=e",yyvsp,"210"); }
+VARIABLE '=' expr { $$ = opr('=', 2, set_index($1), $3); }
 
-| VARIABLE '=' expr_setself { $$ = opr('=', 2, set_index($1), $3); debug_vsp(yyval,"v=ess",yyvsp,"210"); }
+| VARIABLE '=' expr_setself { $$ = opr('=', 2, set_index($1), $3); }
 
 | expr_setself
 
@@ -138,59 +140,59 @@ VARIABLE '=' expr { $$ = opr('=', 2, set_index($1), $3); debug_vsp(yyval,"v=e",y
 
 expr_setself:
 
-  ADD_T VARIABLE  { $$ = opr(ADD_T, 1, set_index($2));  debug_vsp(yyval,"++v",yyvsp,"42");   }
+  ADD_T VARIABLE  { $$ = opr(ADD_T, 1, set_index($2)); }
 
-  | MUS_T VARIABLE  { $$ = opr(MUS_T, 1, set_index($2));  debug_vsp(yyval,"--v",yyvsp,"42");   }
+  | MUS_T VARIABLE  { $$ = opr(MUS_T, 1, set_index($2)); }
 
-  | VARIABLE ADD_T  { $$ = opr(ADD_TT, 1, set_index($1));  debug_vsp(yyval,"v++",yyvsp,"24");  }
+  | VARIABLE ADD_T  { $$ = opr(ADD_TT, 1, set_index($1)); }
 
-  | VARIABLE MUS_T  { $$ = opr(MUS_TT, 1, set_index($1));  debug_vsp(yyval,"v--",yyvsp,"24");  }
+  | VARIABLE MUS_T  { $$ = opr(MUS_TT, 1, set_index($1)); }
 
-  | '(' expr_setself ')' { $$ = $2; debug_vsp(yyval,"(ess)",yyvsp,"101");   }
+  | '(' expr_setself ')' { $$ = $2; }
 
   ;
 
 
 expr_comp:
 
-  expr '<' expr   { $$ = opr('<', 2, $1, $3); debug_vsp(yyval,"e<e",yyvsp,"010");    }
+  expr '<' expr   { $$ = opr('<', 2, $1, $3); }
 
-  | expr '>' expr   { $$ = opr('>', 2, $1, $3); debug_vsp(yyval,"e>e",yyvsp,"010");    }
+  | expr '>' expr   { $$ = opr('>', 2, $1, $3); }
 
-  | expr GE expr    { $$ = opr(GE, 2, $1, $3);  debug_vsp(yyval,"e>=e",yyvsp,"040");   }
+  | expr GE expr    { $$ = opr(GE, 2, $1, $3); }
 
-  | expr LE expr    { $$ = opr(LE, 2, $1, $3);  debug_vsp(yyval,"e<=e",yyvsp,"040");   }
+  | expr LE expr    { $$ = opr(LE, 2, $1, $3); }
 
-  | expr NE expr    { $$ = opr(NE, 2, $1, $3);  debug_vsp(yyval,"e!=e",yyvsp,"040");   }
+  | expr NE expr    { $$ = opr(NE, 2, $1, $3); }
 
-  | expr EQ expr    { $$ = opr(EQ, 2, $1, $3);  debug_vsp(yyval,"e==e",yyvsp,"040");   }
+  | expr EQ expr    { $$ = opr(EQ, 2, $1, $3); }
 
-  | expr_comp AND expr_comp { $$ = opr(AND, 2, $1, $3); debug_vsp(yyval,"ec&&ec",yyvsp,"040"); }
+  | expr_comp AND expr_comp { $$ = opr(AND, 2, $1, $3); }
 
-  | expr_comp OR expr_comp  { $$ = opr(OR, 2, $1, $3);  debug_vsp(yyval,"ec||ec",yyvsp,"040"); }
+  | expr_comp OR expr_comp  { $$ = opr(OR, 2, $1, $3); }
 
-  | '(' expr_comp ')'       { $$ = $2;                  debug_vsp(yyval,"(ec)",yyvsp,"101");   }
+  | '(' expr_comp ')'       { $$ = $2; }
 
   ;
 
 
 expr:
 
-NUMBER            { $$ = set_content($1);      debug_vsp(yyval,"f",yyvsp,"3");     }
+NUMBER            { $$ = set_content($1); }
 
-| VARIABLE        { $$ = set_index($1);        debug_vsp(yyval,"v",yyvsp,"2");  }
+| VARIABLE        { $$ = set_index($1); }
 
-| '-' NUMBER %prec UMINUS { $$ = set_content(-$2);   debug_vsp(yyval,"-e", yyvsp,"13"); }
+| '-' NUMBER %prec UMINUS { $$ = set_content(-$2); }
 
-| expr '+' expr   { $$ = opr('+', 2, $1, $3);  debug_vsp(yyval,"e+e",yyvsp,"010"); }
+| expr '+' expr   { $$ = opr('+', 2, $1, $3); }
 
-| expr '-' expr   { $$ = opr('-', 2, $1, $3);  debug_vsp(yyval,"e-e",yyvsp,"010"); }
+| expr '-' expr   { $$ = opr('-', 2, $1, $3); }
 
-| expr '*' expr   { $$ = opr('*', 2, $1, $3);  debug_vsp(yyval,"e*e",yyvsp,"010"); }
+| expr '*' expr   { $$ = opr('*', 2, $1, $3); }
 
-| expr '/' expr   { $$ = opr('/', 2, $1, $3);  debug_vsp(yyval,"e/e",yyvsp,"010"); }
+| expr '/' expr   { $$ = opr('/', 2, $1, $3); }
 
-| '(' expr ')'    { $$ = $2;                   debug_vsp(yyval,"(e)",yyvsp,"101"); }
+| '(' expr ')'    { $$ = $2; }
 
 | VARIABLE '[' expr ']' { $$ = opr('[',2,set_index($1),$3); }
 
