@@ -1,4 +1,6 @@
+array.in
 foreach.in
 for.in
 input.in
+test2.in
 test.in

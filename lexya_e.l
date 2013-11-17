@@ -46,6 +46,22 @@ any .
     G_iBuffRowCount++;
 }
 
+"function" {
+
+    yylval.index = FUNCTION - USER_DEF_NUM;
+
+    G_Def[yylval.index].name = "function";
+
+    char buf[100] = "TOKEN         :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
+
+    return FUNCTION;
+}
+
+
 "int" {
 
     yylval.index = INT - USER_DEF_NUM;
@@ -414,7 +430,7 @@ any .
 }
 
 
-[()<>=+\-*/;{}.] {
+[(),<>=+\-*/;{}.] {
 
     yylval.index = *yytext;
 

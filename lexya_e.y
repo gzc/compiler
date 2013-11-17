@@ -55,7 +55,7 @@ void yyerror(char *s);
 %left ADD_T ADD_TT MUS_T MUS_TT
 %left '[' ']'
 %nonassoc UMINUS
-%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr        /* func_decl_args func_decl */
+%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr func_decl_args
 
 
 %%
@@ -102,6 +102,8 @@ BREAK ';' { $$ = opr(BREAK,0); }
 
 | var_decl';'{}
 
+| FUNCTION VARIABLE '(' func_decl_args ')' stmt { $$ = opr(FUNCTION, 3, set_index($2), $4, $6); }
+
 ;
 
 
@@ -112,6 +114,17 @@ stmt{ $$=$1; }
 | stmt_list stmt{ $$=opr(';',2,$1,$2); }
 
 ;
+
+
+
+func_decl_args: 
+
+var_decl { $$ = $1; }
+
+| func_decl_args ',' var_decl { $$ = opr(',', 2, $1, $3); }
+
+;
+
 
 
 
