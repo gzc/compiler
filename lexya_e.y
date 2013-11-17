@@ -43,7 +43,8 @@ void yyerror(char *s);
 %token <index> VARIABLE
 %token INT FLOAT
 %token PRINT
-%token FOR WHILE BREAK
+%token FOR FOREACH WHILE BREAK
+%token IN
 %token FUNCTION
 %nonassoc IF
 %nonassoc ELSE
@@ -86,6 +87,8 @@ BREAK ';' { $$ = opr(BREAK,0); }
 | PRINT expr_set ';'    { $$ = opr(PRINT, 1, $2); }
 
 | FOR '(' expr_set ';' expr_comp ';' expr_set ')' stmt { $$ = opr(FOR, 4, $3, $5, $7, $9); }
+
+| FOREACH '(' VARIABLE IN VARIABLE ')' stmt { $$ = opr(FOREACH, 3, set_index($3), set_index($5), $7); printf("haha");}
 
 | WHILE '(' expr_comp ')' stmt       { $$ = opr(WHILE, 2, $3, $5); }
 

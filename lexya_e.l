@@ -92,9 +92,39 @@ any .
     return FOR;
 }
 
+"foreach" {
+
+    yylval.index = FOREACH - USER_DEF_NUM;
+
+    G_Def[yylval.index].name= "foreach";
+
+    char buf[100] = "Token	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf); printf("foreach\n");
+
+    return FOREACH;
+}
+
+"in" {
+
+    yylval.index = IN - USER_DEF_NUM;
+
+    G_Def[yylval.index].name= "in";
+
+    char buf[100] = "Token	           :       ";
+    
+    strcat(buf,yytext);
+
+    add_buff(yytext,buf);
+
+    return IN;
+}
+
 "break" {
 
-    yylval.index = FOR - USER_DEF_NUM;
+    yylval.index = BREAK - USER_DEF_NUM;
 
     G_Def[yylval.index].name= "break";
 

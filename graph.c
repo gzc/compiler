@@ -142,6 +142,7 @@ void GraphNode(Node *p,int xoffset,int yoffset,int parent) {
 		 case WHILE: sNodeText = "while";  break;
 		 case IF:     sNodeText = "if";    break;
 		 case FOR:    sNodeText = "for";   break;
+		 case FOREACH:sNodeText = "foreach";break;
 		 case BREAK:  sNodeText = "break"; break;
 		 case PRINT:  sNodeText = "print"; break;
 		 case ';':    sNodeText = "[;]";   break;		 

@@ -43,22 +43,24 @@
      FLOAT = 261,
      PRINT = 262,
      FOR = 263,
-     WHILE = 264,
-     BREAK = 265,
-     FUNCTION = 266,
-     IF = 267,
-     ELSE = 268,
-     OR = 269,
-     AND = 270,
-     NE = 271,
-     EQ = 272,
-     LE = 273,
-     GE = 274,
-     MUS_TT = 275,
-     MUS_T = 276,
-     ADD_TT = 277,
-     ADD_T = 278,
-     UMINUS = 279
+     FOREACH = 264,
+     WHILE = 265,
+     BREAK = 266,
+     IN = 267,
+     FUNCTION = 268,
+     IF = 269,
+     ELSE = 270,
+     OR = 271,
+     AND = 272,
+     NE = 273,
+     EQ = 274,
+     LE = 275,
+     GE = 276,
+     MUS_TT = 277,
+     MUS_T = 278,
+     ADD_TT = 279,
+     ADD_T = 280,
+     UMINUS = 281
    };
 #endif
 
@@ -78,7 +80,7 @@ typedef union YYSTYPE
 
 
 /* Line 2068 of yacc.c  */
-#line 82 "lexya_e.tab.h"
+#line 84 "lexya_e.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

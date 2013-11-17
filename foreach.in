@@ -1,0 +1,5 @@
+int i;
+int a[10];
+foreach(i in a){
+    print(i);
+}
