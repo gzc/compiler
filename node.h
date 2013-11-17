@@ -30,10 +30,10 @@ struct VarDefine
 };
 
 #define USER_DEF_NUM 259
-#define MAX_VARS 100
-#define MAX_DEFS 20
-#define MAX_BUFF_COLS 40
-#define MAX_BUFF_ROWS 40
+#define MAX_VARS 200
+#define MAX_DEFS 100
+#define MAX_BUFF_COLS 400
+#define MAX_BUFF_ROWS 400
 
 extern struct VarIndex G_Var[MAX_VARS];
 extern struct VarDefine G_Def[MAX_DEFS];

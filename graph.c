@@ -10,16 +10,16 @@
 
 #define MAX_NODE_TEXT_LEN 10
 
-#define MAX_SUBNODE_COUNT 5
-
+#define MAX_SUBNODE_COUNT 1000
 
 #define NODE_WIDTH 4
 
-#define MAX_NODE_COUNT 100
+#define MAX_NODE_COUNT 1000
 
 
-#define MAX_TREE_WIDTH 20
-#define MAX_TREE_DEEP 10
+#define MAX_TREE_WIDTH 200
+
+#define MAX_TREE_DEEP 1000
 
 
 

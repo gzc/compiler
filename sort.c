@@ -15,7 +15,7 @@
     {
 	high = s[--p];
 	low = s[--p];
-	if(low >- high)
+	if(low > high)
 	    break;
 	int x = a[low];
 	int k = low;

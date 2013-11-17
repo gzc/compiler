@@ -80,7 +80,7 @@ BREAK ';' { $$ = opr(BREAK,0); }
 
 | CONTINUE ';' { $$ = opr(CONTINUE,0); }
 
-| ';'{ $$=opr(';',2,NULL,NULL); }
+| ';'{ $$=opr(';',0); }
 
 | expr_set';'{ $$=$1; }
 
@@ -90,7 +90,7 @@ BREAK ';' { $$ = opr(BREAK,0); }
 
 | FOR '(' expr_set ';' expr_comp ';' expr_set ')' stmt { $$ = opr(FOR, 4, $3, $5, $7, $9); }
 
-| FOREACH '(' VARIABLE IN VARIABLE ')' stmt { $$ = opr(FOREACH, 3, set_index($3), set_index($5), $7); printf("haha");}
+| FOREACH '(' VARIABLE IN VARIABLE ')' stmt { $$ = opr(FOREACH, 3, set_index($3), set_index($5), $7);}
 
 | WHILE '(' expr_comp ')' stmt       { $$ = opr(WHILE, 2, $3, $5); }
 
@@ -202,6 +202,8 @@ NUMBER            { $$ = set_content($1); }
 | '(' expr ')'    { $$ = $2; }
 
 | VARIABLE '[' expr ']' { $$ = opr('[',2,set_index($1),$3); }
+
+| VARIABLE '[' expr_setself ']' { $$ = opr('[',2,set_index($1),$3); }
 
 ;
 
