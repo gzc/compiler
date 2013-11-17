@@ -1,3 +1,5 @@
-function sum(int a,int b,int c){
+int sum(int a,int b,int c){
     c = a + b;
 }
+d = sum(1,2,3);
+

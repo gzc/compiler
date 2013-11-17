@@ -41,10 +41,10 @@ void yyerror(char *s);
 
 %token <val> NUMBER
 %token <index> VARIABLE
-%token INT FLOAT
 %token PRINT
 %token FOR FOREACH WHILE BREAK CONTINUE
 %token IN
+%token INT FLOAT
 %nonassoc IF
 %nonassoc ELSE
 %left AND OR
@@ -54,7 +54,7 @@ void yyerror(char *s);
 %left ADD_T ADD_TT MUS_T MUS_TT
 %left '[' ']'
 %nonassoc UMINUS
-%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr func_decl_args args
+%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr func_decl_args 
 
 
 %%
@@ -101,9 +101,10 @@ BREAK ';' { $$ = opr(BREAK,0); }
 
 | var_decl';'{}
 
-| INT VARIABLE '(' func_decl_args ')' stmt { $$ = opr('f', 3, set_index($2), $4, $6); }
+| INT VARIABLE '(' func_decl_args ')' stmt { $$ = opr(FUNCTION, 3, set_index($2), $4, $6); }
 
-| FLOAT VARIABLE '(' func_decl_args ')' stmt { $$ = opr('f', 3, set_index($2), $4, $6); }
+| FLOAT VARIABLE '(' func_decl_args ')' stmt { $$ = opr(FUNCTION, 3, set_index($2), $4, $6); }
+
 ;
 
 
@@ -132,15 +133,16 @@ var_decl:
 
 INT VARIABLE{ $$ = set_index($2);}
 
-| FLOAT VARIABLE {$$ = set_index($2);}
+FLOAT VARIABLE{ $$ = set_index($2);}
 
-| INT VARIABLE '=' expr {$$ = opr('=', 2, set_index($2), $4);}
+| INT  VARIABLE '=' expr {$$ = opr('=', 2, set_index($2), $4);}
 
-| FLOAT VARIABLE '=' expr { $$ = opr('=', 2, set_index($2), $4); }
+| FLOAT VARIABLE '=' expr {$$ = opr('=', 2, set_index($2), $4);}
 
 | INT VARIABLE '[' expr ']' { $$ = set_index($2); }
 
 | FLOAT VARIABLE '[' expr ']' { $$ = set_index($2); }
+
 ;
 
 
@@ -219,20 +221,7 @@ NUMBER            { $$ = set_content($1); }
 
 | VARIABLE '[' expr_setself ']' { $$ = opr('[',2,set_index($1),$3); }
 
-| VARIABLE '(' args ')' { $$ = opr('c', 2, set_index($1), $3); }
-
 ;
-
-
-args: 
-
-expr { $$ = $1; }
-
-| args ',' expr { $$ = opr(',', 2, $1, $3); }
-
-;
-
-
 
 
 
@@ -250,7 +239,7 @@ Node *set_content(float value){
     sizeNode = SIZE_OF_NODE + sizeof(float);
 
     if((p = malloc(sizeNode)) == NULL)
-        yyerror("out of memory");
+	yyerror("out of memory");
 
 
     p->type = TYPE_CONTENT;
@@ -268,7 +257,7 @@ Node *set_index(int value){
     sizeNode = SIZE_OF_NODE + sizeof(int);
 
     if((p = malloc(sizeNode)) == NULL)
-        yyerror("out of memory");
+	yyerror("out of memory");
 
 
     p->type = TYPE_INDEX;
@@ -287,7 +276,7 @@ Node *opr(int name,int num,...){
     sizeNode = SIZE_OF_NODE + sizeof(OpNode) + (num - 1) * sizeof(Node*);
 
     if((p = malloc(sizeNode)) == NULL)
-        yyerror("out of memory");
+	yyerror("out of memory");
 
 
     
@@ -298,7 +287,7 @@ Node *opr(int name,int num,...){
     va_start(valist,num);
 
     for(i = 0;i < num;i++)
-        p->op.node[i] = va_arg(valist,Node*);
+	p->op.node[i] = va_arg(valist,Node*);
 
     va_end(valist);
     return p;
@@ -313,52 +302,52 @@ void debug_vsp(YYSTYPE yval, char * info, YYSTYPE * vsp, char * mark) {
     int ilen=strlen(mark);
 
     for(i=1-ilen;i<=0;i++) {
-                
-        switch(mark[ilen+i-1]){
-        
-            case '0':
-        
-                printf(" [ 0x%x ",vsp[i].node);//「」
-                
-                switch(vsp[i].node->type) {
-                
-                    case TYPE_CONTENT:
-                
-                        printf("%g ] ",vsp[i].node->content);
-                                                              
-                        break;
-                        
-                    case TYPE_INDEX:
-                        
-                        printf("%s ] ",G_Var[vsp[i].node->index].mark);
-                        
-                        break;
-                        
-                    case TYPE_OP:
+		
+	switch(mark[ilen+i-1]){
+	
+	    case '0':
+	
+		printf(" [ 0x%x ",vsp[i].node);//「」
+		
+		switch(vsp[i].node->type) {
+		
+		    case TYPE_CONTENT:
+		
+			printf("%g ] ",vsp[i].node->content);
+							      
+			break;
+			
+		    case TYPE_INDEX:
+			
+			printf("%s ] ",G_Var[vsp[i].node->index].mark);
+			
+			break;
+			
+		    case TYPE_OP:
 
-                        if(vsp[i].node->op.name<USER_DEF_NUM)
-                            printf("%c ] ",vsp[i].node->op.name);
+			if(vsp[i].node->op.name<USER_DEF_NUM)
+			    printf("%c ] ",vsp[i].node->op.name);
 
-                        else                        
-                            printf("%s ] ",G_Def[vsp[i].node->op.name-USER_DEF_NUM].name);
-                        break;      
-                }
-                break;
-            case '1':
-                printf(" %c ",vsp[i].index);   /* 打印运算符 */
-                break;
-            case '2':
-                printf(" %s ",G_Var[vsp[i].index].mark);
-                break;
-            case '3':
-                printf(" %g ",vsp[i].val);
-                break;
-            case '4':
-                printf(" %s ",G_Def[vsp[i].index].name);                
-                break;  
-                
-        }
-        
+			else			
+			    printf("%s ] ",G_Def[vsp[i].node->op.name-USER_DEF_NUM].name);
+			break;      
+		}
+		break;
+	    case '1':
+		printf(" %c ",vsp[i].index);   /* 打印运算符 */
+		break;
+	    case '2':
+		printf(" %s ",G_Var[vsp[i].index].mark);
+		break;
+	    case '3':
+		printf(" %g ",vsp[i].val);
+		break;
+	    case '4':
+		printf(" %s ",G_Def[vsp[i].index].name);		
+		break;  
+		
+	}
+	
     }
     printf("\n");
     print_stmt();
@@ -371,18 +360,18 @@ void debug_vsp(YYSTYPE yval, char * info, YYSTYPE * vsp, char * mark) {
 void add_var(char *mark){
 
     if(G_iVarMaxIndex == 0){
-        strcpy(G_Var[0].mark,mark);
-        G_iVarMaxIndex++;
-        G_iVarCurIndex=0;
-        return;
+	strcpy(G_Var[0].mark,mark);
+	G_iVarMaxIndex++;
+	G_iVarCurIndex=0;
+	return;
     }
 
     int i; 
     for(i=0;i<=G_iVarMaxIndex-1;i++) {
-         if(strcmp(G_Var[i].mark,mark)==0) {
-             G_iVarCurIndex=i;
-             return;
-         }
+	 if(strcmp(G_Var[i].mark,mark)==0) {
+	     G_iVarCurIndex=i;
+	     return;
+	 }
      }
 
     strcpy(G_Var[G_iVarMaxIndex].mark,mark);
@@ -395,9 +384,9 @@ void print_stmt() {
      printf(" -STMT: \n");
 
      if(G_iBuffColCount==0)
-         printf("  %s \n",G_sBuff[G_iBuffRowCount-1]);  
+	 printf("  %s \n",G_sBuff[G_iBuffRowCount-1]);  
      else
-         printf("  %s \n",G_sBuff[G_iBuffRowCount]);
+	 printf("  %s \n",G_sBuff[G_iBuffRowCount]);
    
      printf("\n");
 }
@@ -407,14 +396,14 @@ void NodeFree(Node *p){
     int i;
     if(!p)return;
     if(p->type == TYPE_OP){
-        for(i = 0;i<p->op.num;i++)
-            NodeFree(p->op.node[i]);
+	for(i = 0;i<p->op.num;i++)
+	    NodeFree(p->op.node[i]);
     }
     free(p);
 }
 
 void yyerror(char *s){
-         
+	 
     printf("<Parser Error> Line %d ,Col %d \n",G_iBuffRowCount+1,G_iBuffColCount+1);
 
     printf(" %s\n",G_sBuff[G_iBuffRowCount]);

@@ -139,7 +139,8 @@ void GraphNode(Node *p,int xoffset,int yoffset,int parent) {
 
 	 case TYPE_OP:
 	     switch(p->op.name) {
-		 case FUNCTION: sNodeText = "function";break;
+		 case 'f': sNodeText = "function";break;
+	         case 'c': sNodeText = "call";    break;
 		 case ',':    sNodeText = ",";     break;
 		 case WHILE: sNodeText = "while";  break;
 		 case IF:     sNodeText = "if";    break;
