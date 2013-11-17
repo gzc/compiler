@@ -1,3 +1,7 @@
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
 #include "node.h"
@@ -77,7 +81,16 @@ char *itoa(int,char *);
 
 
 int NodeExecute(Node *p){
+    
+    int fd;
+    fd = open("ADT_graph.txt",O_WRONLY | O_CREAT | O_TRUNC,S_IRWXU  | S_IRWXG | S_IRWXO);
 
+    if(fd < 0)
+	printf("err in open\n");
+
+    if(dup2(fd,STDOUT_FILENO) < 0)
+	printf("err in dup2\n");
+    	
     G_iNodeCount = -1;
     G_iNodeParent = -1;
     G_iMinNodeXValue = 0;
@@ -85,13 +98,14 @@ int NodeExecute(Node *p){
     GraphNode(p,0,0,G_iNodeParent);
 
     GraphNode_Order();
-    GraphNode_PrintVars();
+    //GraphNode_PrintVars();
     GraphNode_Adjust();
     GraphNode_FillPos();
-    GraphNode_PrintVars();
+    //GraphNode_PrintVars();
 
     GraphNode_Print();
-
+	
+    close(fd);
     return 0;
 }
 

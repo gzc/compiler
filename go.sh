@@ -1,3 +1,4 @@
+clear
 flex lexya_e.l
 bison -d lexya_e.y
 gcc -g -o  graph lexya_e.tab.c lex.yy.c graph.c

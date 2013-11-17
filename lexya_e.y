@@ -54,7 +54,7 @@ void yyerror(char *s);
 %left ADD_T ADD_TT MUS_T MUS_TT
 %left '[' ']'
 %nonassoc UMINUS
-%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr func_decl_args func_decl
+%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr        /* func_decl_args func_decl */
 
 
 %%
@@ -178,7 +178,7 @@ expr:
 
 NUMBER            { $$ = set_content($1);      debug_vsp(yyval,"f",yyvsp,"3");     }
 
-| VARIABLE        { $$ = set_index($1);        debug_vsp(yyval,"v",yyvsp,"2");  printf("hahaha\n");   }
+| VARIABLE        { $$ = set_index($1);        debug_vsp(yyval,"v",yyvsp,"2");  }
 
 | '-' NUMBER %prec UMINUS { $$ = set_content(-$2);   debug_vsp(yyval,"-e", yyvsp,"13"); }
 
