@@ -44,6 +44,7 @@ void yyerror(char *s);
 %token INT FLOAT
 %token PRINT
 %token FOR WHILE
+%token FUNCTION
 %nonassoc IF
 %nonassoc ELSE
 %left AND OR
@@ -53,7 +54,7 @@ void yyerror(char *s);
 %left ADD_T ADD_TT MUS_T MUS_TT
 %left '[' ']'
 %nonassoc UMINUS
-%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr 
+%type <node> stmt stmt_list var_decl expr_set expr_setself expr_comp expr func_decl_args func_decl
 
 
 %%
